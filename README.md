@@ -1,4 +1,4 @@
-# UFC_Card_Predictor
+# UFC_Fights_Predictor
 ### Project will contain 3 subtasks in order to achive fight/full card prediction:
 
 - [x] scrapping every UFC fighters statistics to "ufc_fighters_stats.csv"
