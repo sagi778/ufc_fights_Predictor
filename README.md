@@ -5,7 +5,8 @@
 - notepad: https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/Fighters_stats_scrape.ipynb
 
 - [x] 2. scrapping every UFC fight statistics from http://ufcstats.com/ to "ufc_fighters_stats.csv"
-- notepad: Fights_stats_scrape.ipynb
-- 
+- notepad: [Fights_stats_scrape.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/Fights_stats_scrape.ipynb)
 
-- [ ] analysing past data for next fights predictions
+- [x] 3. Data Pre-Processing
+
+- [x] 4. Feature Engineering
