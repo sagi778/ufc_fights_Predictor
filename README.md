@@ -9,8 +9,8 @@
 - Result data file: [ufc_fights_stats.csv](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/data/ufc_fights_stats.csv)
 
 ### 3. Data Pre-Processing & Exploratory Data Analysis:
-- - [x] Units convertion (height, reach & weight).
-- - [x]  
+- [x] Units convertion (height, reach & weight).
+- [x]  
 
 ### 4. Feature Engineering
 
