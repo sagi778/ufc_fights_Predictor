@@ -3,6 +3,7 @@
 
 - [x] 1. scrapping every UFC fighter statistics from http://ufcstats.com/ to "ufc_fighters_stats.csv"
 - notepad: [Fighters_stats_scrape.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/Fighters_stats_scrape.ipynb)
+- data: [ufc_fighters_stats.csv](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/data/ufc_fighters_stats.csv)
 
 - [x] 2. scrapping every UFC fight statistics from http://ufcstats.com/ to "ufc_fighters_stats.csv"
 - notepad: [Fights_stats_scrape.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/Fights_stats_scrape.ipynb)
