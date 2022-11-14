@@ -17,5 +17,9 @@
 - Result data file: [ufc_data.csv](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/data/ufc_data.csv)
 
 ### 4. Feature Engineering
+- [x] 
 
 ### 5. Training Models & evaluating 
+- [x] Final fight outcome testing & evaluating:
+      88% accurate predictions:
+      ![confusion_matrix](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/pic/test_score_confusion_matrix.png)
