@@ -22,8 +22,10 @@
 ### 5. Training Models & evaluating 
 - Fight statistics prediction:
 ![knn_pred](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/pic/knn_model_stats_pred.png)
-- [x] Training Random Forest model + optimizing number of trees:
+
+- Training Random Forest model + optimizing number of trees:
 ![rf_model_opt](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/pic/rf_model_opt.png)
+
 - Final fight outcome testing & evaluating:
   **88% accurate predictions:
   ![confusion_matrix](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/pic/test_score_confusion_matrix.png)
