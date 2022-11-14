@@ -12,9 +12,9 @@
 - [x] Units conversion (height, reach & weight to cm).
 - [x] Replacing Null values. 
 - [x] Convert fighter's record to win%
+- [x] Featuring win & lose fighting streak. 
 - [x] Merge [ufc_fighters_stats.csv](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/data/ufc_fighters_stats.csv) & [ufc_fights_stats.csv](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/data/ufc_fights_stats.csv).
-
--Result data file: [ufc_data.csv](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/data/ufc_data.csv)
+- Result data file: [ufc_data.csv](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/data/ufc_data.csv)
 
 ### 4. Feature Engineering
 
