@@ -20,6 +20,6 @@
 - [x] 
 
 ### 5. Training Models & evaluating 
-- [x] Final fight outcome testing & evaluating:
-      88% accurate predictions:
-      ![confusion_matrix](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/pic/test_score_confusion_matrix.png)
+- Final fight outcome testing & evaluating:
+  88% accurate predictions:
+  ![confusion_matrix](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/pic/test_score_confusion_matrix.png)
