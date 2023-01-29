@@ -1,2 +1,2 @@
-,ml_model,parameter_name,value
-0,knn_reg,neighbors,29
+,ml_model,parameter_name,value,accuracy
+0,knn_reg,neighbors,29,0.6296999999999999
