@@ -1,4 +1,5 @@
 # UFC_Fights_Predictor
+all notebooks are still in-progress
 
 ### 1. scrapping every UFC fighter statistics from http://ufcstats.com/ to "ufc_fighters_stats.csv"
 - Notepad: [Fighters_stats_scrape.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/Fighters_stats_scrape.ipynb)
