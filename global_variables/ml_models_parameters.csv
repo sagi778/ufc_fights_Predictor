@@ -1,3 +1,4 @@
-,ml_model,parameter_name,value,accuracy
-0,knn_reg,neighbors,29,0.6909000000000001
-0,knn_clf,neighbors,256,0.8638562543192813
+ml_model,parameter_name,value,accuracy
+stats_random_forest_regressor,n_estimator,128,0.8842
+result_random_forest_classifier,n_estimator,128,0.8572423398328691
+method_random_forest_classifier,n_estimator,32,0.7239692522711391
