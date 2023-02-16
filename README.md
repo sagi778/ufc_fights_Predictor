@@ -21,9 +21,9 @@ all notebooks are still work-in-progress
 - [x] 
 
 ### 5. Training Models, Tuning & evaluating 
-- [x] Fight statistics prediction: [stats_model_training.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/stats_model_training.ipynb)
-- [x] Result prediction: [result_model_training.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/result_model_training.ipynb)
-- [x] Method(=Decision/Submission/Knockout) prediction: [method_model_training.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/method_model_training.ipynb)
+- [x] Fight statistics prediction model: [stats_model_training.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/stats_model_training.ipynb)
+- [x] Result prediction model: [result_model_training.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/result_model_training.ipynb)
+- [x] Method(=Decision/Submission/Knockout) prediction model: [method_model_training.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/method_model_training.ipynb)
 
 - **Training Random Forest model**: Optimizing model for best accuracy with minimum number of estimators
 ![rf_model](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/pic/rf_model_opt.png)
