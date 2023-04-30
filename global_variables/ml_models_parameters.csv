@@ -1,4 +1,0 @@
-ml_model,parameter_name,value,accuracy
-stats_random_forest_regressor,n_estimator,128,0.8842
-result_random_forest_classifier,n_estimator,128,0.8572423398328691
-method_random_forest_classifier,n_estimator,32,0.7239692522711391
