@@ -25,9 +25,6 @@ all notebooks are still work-in-progress
 - [x] Result prediction model: [result_model_training.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/result_model_training.ipynb)
 - [x] Method(=Decision/Submission/Knockout) prediction model: [method_model_training.ipynb](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/notebooks/method_model_training.ipynb)
 
-- **Training Random Forest model**: Optimizing model for best accuracy with minimum number of estimators
-![rf_model](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/pic/rf_model_opt.png)
-
 - Final fight outcome testing & evaluating:
   **85% - 88% accurate predictions**:
   ![confusion_matrix](https://github.com/sagi778/UFC_Fights_Predictor/blob/main/pic/test_score_confusion_matrix.png)
