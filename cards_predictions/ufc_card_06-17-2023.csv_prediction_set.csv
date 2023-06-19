@@ -1,0 +1,14 @@
+fighter,opponent,weight_class,W,actual,win_prob,method,method_prob,str_dif,kd_dif,td_dif,sub_dif
+Marvin Vettori,Jared Cannonier,Middleweight,Marvin Vettori,Jared Cannonier,0.650591562,decision,0.57,0.07386993,-0.58470875,1.211987,0.26463073
+Arman Tsarukyan,Joaquim Silva,Lightweight,Arman Tsarukyan,Arman Tsarukyan,0.928005527,decision,0.6,0.5635932,0.59011185,0.96010417,-0.2876692
+Armen Petrosyan,Christian Duncan,Middleweight,Christian Duncan,Armen Petrosyan,0.507540758,decision,0.52,0.3097564,-0.7793736,-0.08270329,0.2602086
+Pat Sabatini,Lucas Almeida,Featherweight,Lucas Almeida,Pat Sabatini,0.536559402,knockout,0.43,0.85939074,-2.8840022,0.9781778,1.1657338
+Manuel Torres,Nikolas Motta,Lightweight,Manuel Torres,Manuel Torres,0.997612103,decision,0.53,2.3225987,1.1425248,0.29321015,0.8113205
+Nicolas Dalby,Muslim Salikhov,Welterweight,Nicolas Dalby,Nicolas Dalby,0.725521046,decision,0.55,0.32348353,0.35780314,-0.3128515,-0.00458088
+Raoni Barcelos,Miles Johns,Bantamweight,Miles Johns,,0.912650472,decision,0.5,-1.029817,-0.29492632,0.2547013,-0.049098726
+Jimmy Flick,Alessandro Costa,Flyweight,Jimmy Flick,Alessandro Costa,0.59807904,submission,0.39,-0.17697841,-0.5937157,2.0487063,-0.03239534
+Kyung Ho Kang,Cristian Quinonez,Bantamweight,Kyung Ho Kang,Kyung Ho Kang,0.947924781,decision,0.57,0.7844608,0.19006076,0.93867534,0.3063726
+Carlos Hernandez,Denys Bondar,Flyweight,Denys Bondar,Carlos Hernandez,0.93967764,decision,0.52,-1.5457498,0.079570055,-1.1804328,-0.054424785
+Tereza Bleda,Gabriella Fernandes,Women's Flyweight,Tereza Bleda,,0.712146108,decision,0.44,0.34436208,-0.40665722,0.7176673,0.25825688
+Dan Argueta,Ronnie Lawrence,Bantamweight,Ronnie Lawrence,,0.932794262,decision,0.64,-0.79252684,0.17636381,-1.7105179,-0.14302644
+Zac Pauga,Modestas Bukauskas,Light Heavyweight,Zac Pauga,Modestas Bukauskas,0.994689685,decision,0.59,2.1191728,0.8796086,-0.20466703,0.6628572
