@@ -1,0 +1,11 @@
+fighter,opponent,event_name,weight_class,predicted_winner,actual_winner,win_prob,method,actual_method,method_prob,str_dif,kd_dif,td_dif,sub_dif
+Alexander Volkanovski,Yair Rodriguez,UFC 290: Volkanovski vs. Rodriguez,Featherweight,Alexander Volkanovski,Alexander Volkanovski,0.936264148,decision,knockout,0.48,0.22157215,1.5567884,0.3960583,0.032996964
+Brandon Moreno,Alexandre Pantoja,UFC 290: Volkanovski vs. Rodriguez,Flyweight,Brandon Moreno,Alexandre Pantoja,0.620309697,decision,submission,0.54,-0.08338061,0.2519355,0.552591,-0.17927675
+Robert Whittaker,Dricus Du Plessis,UFC 290: Volkanovski vs. Rodriguez,Middleweight,Dricus Du Plessis,Dricus Du Plessis,0.599738502,knockout,knockout,0.38,-0.8690196,1.2195488,-0.009818246,-0.99341536
+Jalin Turner,Dan Hooker,UFC 290: Volkanovski vs. Rodriguez,Lightweight,Jalin Turner,Dan Hooker,0.890057605,decision,decision,0.52,0.83188665,0.5125513,-0.4183629,0.57348996
+Bo Nickal,Tresean Gore,UFC 290: Volkanovski vs. Rodriguez,Middleweight,Tresean Gore,Bo Nickal,0.642531248,submission,knockout,0.42,0.4267068,-0.07009888,0.74057454,0.34111795
+Robbie Lawler,Niko Price,UFC 290: Volkanovski vs. Rodriguez,Welterweight,Robbie Lawler,Robbie Lawler,0.542767725,decision,knockout,0.5,-0.043342765,0.35851082,0.44800517,-0.5750301
+Yazmin Jauregui,Denise Gomes,UFC 290: Volkanovski vs. Rodriguez,Women's Strawweight,Yazmin Jauregui,Denise Gomes,0.830904603,decision,knockout,0.54,0.61111325,1.0720197,-1.2002531,0.03626911
+Jimmy Crute,Alonzo Menifield,UFC 290: Volkanovski vs. Rodriguez,Light Heavyweight,Jimmy Crute,Alonzo Menifield,0.742416007,decision,submission,0.52,-0.2099055,-0.12766336,1.6899815,0.33449543
+Vitor Petrino,Marcin Prachnio,UFC 290: Volkanovski vs. Rodriguez,Light Heavyweight,Marcin Prachnio,Vitor Petrino,0.700192426,decision,submission,0.48,-0.5019613,-0.5429523,1.3514198,0.47093126
+Kamuela Kirk,Esteban Ribovics,UFC 290: Volkanovski vs. Rodriguez,Lightweight,Esteban Ribovics,Esteban Ribovics,0.912846761,decision,decision,0.63,-1.7777864,-0.18495196,0.872952,0.254501
