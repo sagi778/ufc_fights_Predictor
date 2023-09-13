@@ -8,6 +8,9 @@ from datetime import datetime
 from time import time
 from tqdm import tqdm
 import os
+import seaborn as sns
+from scipy import stats
+from random import random
 pd.set_option('display.max_columns', None)
 
 # file management
@@ -43,21 +46,11 @@ def get_xml(url, data_type='xml', headers={'User-Agent': 'Mozilla/5.0 (Windows N
     return soup
 def get_links(url):
 
-    link_items = get_xml(url=url).find_all(
-        'a', {'class': 'b-link b-link_style_black'})
-    dates_items = get_xml(url=url).find_all(
-        'span', {'class': 'b-statistics__date'})
-
-    links = []
-    dates = []
-    for url, date in zip(link_items, dates_items):
-        links.append(url['href'])
-        dates.append(datetime.strptime(date.text.strip(),
-                     "%B %d, %Y").strftime('%m-%d-%Y'))
-
-    data = pd.DataFrame(data=zip(dates, links), columns=['date', 'event_url'])
-    data.date = pd.to_datetime(data['date'], format='%m-%d-%Y')
-    return data
+    link_items = get_xml(url=url).find_all('a', {'class': 'b-link b-link_style_black'})
+    dates_items = get_xml(url=url).find_all('span', {'class': 'b-statistics__date'})
+    links = [item['href'] for item in link_items]
+    dates = [datetime.strptime(item.text.strip(),"%B %d, %Y").strftime('%m-%d-%Y') for item in dates_items]
+    return pd.DataFrame({'date':dates[1:],'event_url':links})
 def get_fighter_data(url):
 
     xml = get_xml(url=url)
@@ -203,12 +196,43 @@ def get_fight_result(FIGHT_URL):
     details = [item for item in xml.find('div',{'class':'b-fight-details__fight'}).text.replace('  ','').strip().splitlines() if item!='']
     data.update({'title':details[0],'method':details[2].strip(),'round':details[4],'time':details[6],'format':details[8],'url':FIGHT_URL})  
     return data  
-def get_event_data(EVENT_URL):
+def get_event_data(EVENT_URL, EVENT_TIME=None):
     data = []
     for url in get_card(EVENT_URL)['url']:
-        row = {'url':url,'event_url':EVENT_URL}
+        row = {'url':url,'event_url':EVENT_URL,'date':EVENT_TIME}
         row.update(get_fight_result(url))
         row.update(get_signifacant_str(url))
         row.update(get_str_perc(url)) 
         data.append(row)
-    return data    
+    return data   
+
+# ML modeling
+def set_train_test(X_columns, y_columns, data, test_size=0.3, valid_size=0.3):
+
+    if 'set' not in data.columns:
+        data.insert(0, 'set', None) # insert 'set' column to position 0
+
+    data['set'] = ['test' if random() < test_size else 'validation' if random() < valid_size else 'train' for item in range(len(data))]    
+    
+    print(f'Data split: Data={data.shape}, train_set={X_train.shape}, validation_set={X_val.shape}, test_set={X_test.shape}')
+    return data
+def get_mean_stat(fighter:str,stat_col:str,time,data):
+    # input check
+    if f'f_{stat_col}' in data.columns or f'o_{stat_col}' in data.columns:
+        stat = stat_col 
+    elif stat_col in data.columns:
+        stat = stat_col[2:]
+    else:
+        print(f'"{stat_col}" column not found in {data.columns}')
+        return None
+
+    df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))]
+    fighter_df = df[['date','fighter',f'f_{stat}']][df.fighter==fighter]
+    opponent_df = df[['date','opponent',f'o_{stat}']][df.opponent==fighter]
+
+    if len(fighter_df) + len(opponent_df) == 0:
+        return 0
+    else:
+        return np.mean(opponent_df[f'o_{stat}'].tolist() + fighter_df[f'f_{stat}'].tolist())    
+
+    
