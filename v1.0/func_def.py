@@ -11,6 +11,7 @@ import os
 import seaborn as sns
 from scipy import stats
 from random import random
+from sklearn.linear_model import LogisticRegression
 pd.set_option('display.max_columns', None)
 
 # file management
@@ -212,7 +213,10 @@ def set_train_test(X_columns, y_columns, data, test_size=0.3, valid_size=0.3):
     if 'set' not in data.columns:
         data.insert(0, 'set', None) # insert 'set' column to position 0
 
-    data['set'] = ['test' if random() < test_size else 'validation' if random() < valid_size else 'train' for item in range(len(data))]    
+    data['set'] = ['test' if random() < test_size else 'validation' if random() < valid_size else 'train' for item in range(len(data))] 
+    X_train = data[data.set=='train']   
+    X_test = data[data.set=='test'] 
+    X_val = data[data.set=='validation'] 
     
     print(f'Data split: Data={data.shape}, train_set={X_train.shape}, validation_set={X_val.shape}, test_set={X_test.shape}')
     return data
