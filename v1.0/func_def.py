@@ -151,18 +151,18 @@ def get_str_perc(FIGHT_URL: str):
     xml = get_xml(FIGHT_URL)
     data = [item.text.strip().replace('\n', '').replace(' ', '')
             for item in xml.find_all('div', {'class': 'b-fight-details__charts-row'})]
-    return {'f_sig_str_head': data[0][:data[0].find('%')+1],
-            'f_sig_str_body': data[1][:data[1].find('%')+1],
-            'f_sig_str_leg': data[2][:data[2].find('%')+1],
-            'f_sig_str_dist': data[3][:data[3].find('%')+1],
-            'f_sig_str_clinch': data[4][:data[4].find('%')+1],
-            'f_sig_str_ground': data[5][:data[5].find('%')+1],
-            'o_sig_str_head': data[0][data[0].find('Head')+len('Head'):],
-            'o_sig_str_body': data[1][data[1].find('Body')+len('Body'):],
-            'o_sig_str_leg': data[2][data[2].find('Leg')+len('Leg'):],
-            'o_sig_str_dist': data[3][data[3].find('Distance')+len('Distance'):],
-            'o_sig_str_clinch': data[4][data[4].find('Clinch')+len('Clinch'):],
-            'o_sig_str_ground': data[5][data[5].find('Ground')+len('Ground'):],
+    return {'f_sig_str_head_perc': int(data[0][:data[0].find('%')])/100,
+            'f_sig_str_body_perc': int(data[1][:data[1].find('%')])/100,
+            'f_sig_str_leg_perc': int(data[2][:data[2].find('%')])/100,
+            'f_sig_str_dist_perc': int(data[3][:data[3].find('%')])/100,
+            'f_sig_str_clinch_perc': int(data[4][:data[4].find('%')])/100,
+            'f_sig_str_ground_perc': int(data[5][:data[5].find('%')])/100,
+            'o_sig_str_head_perc': int(data[0][data[0].find('Head')+len('Head'):-1])/100,
+            'o_sig_str_body_perc': int(data[1][data[1].find('Body')+len('Body'):-1])/100,
+            'o_sig_str_leg_perc': int(data[2][data[2].find('Leg')+len('Leg'):-1])/100,
+            'o_sig_str_dist_perc': int(data[3][data[3].find('Distance')+len('Distance'):-1])/100,
+            'o_sig_str_clinch_perc': int(data[4][data[4].find('Clinch')+len('Clinch'):-1])/100,
+            'o_sig_str_ground_perc': int(data[5][data[5].find('Ground')+len('Ground'):-1])/100,
             'url':FIGHT_URL}
 def get_fighters_links(page_url):
     xml = get_xml(page_url)
@@ -237,6 +237,25 @@ def get_mean_stat(fighter:str,stat_col:str,time,data):
     if len(fighter_df) + len(opponent_df) == 0:
         return 0
     else:
-        return np.mean(opponent_df[f'o_{stat}'].tolist() + fighter_df[f'f_{stat}'].tolist())    
+        return np.mean(opponent_df[f'o_{stat}'].tolist() + fighter_df[f'f_{stat}'].tolist())  
+def get_last_n_stat_mean(fighter:str,stat_col:str,time,data,n=3):
+    # input check
+    if f'f_{stat_col}' in data.columns or f'o_{stat_col}' in data.columns:
+        stat = stat_col 
+    elif stat_col in data.columns:
+        stat = stat_col[2:]
+    else:
+        print(f'"{stat_col}" column not found in {data.columns}')
+        return None
+
+    df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False)[0:n]
+    
+    fighter_df = df[['date','fighter',f'f_{stat}']][df.fighter==fighter]
+    opponent_df = df[['date','opponent',f'o_{stat}']][df.opponent==fighter]
+
+    if len(fighter_df) + len(opponent_df) == 0:
+        return 0
+    else:
+        return np.mean(opponent_df[f'o_{stat}'].tolist() + fighter_df[f'f_{stat}'].tolist())          
 
     
