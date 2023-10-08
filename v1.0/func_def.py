@@ -271,10 +271,15 @@ def get_win_streak(fighter:str,time,data):
     df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False)
     
     fighter_df = df[['date','fighter','result']][df.fighter==fighter]
-    opponent_df = df[['date','opponent','result']][df.opponent==fighter]
+    opponent_df = df[['date','opponent','result']][df.opponent==fighter].rename(columns={'opponent':'fighter'})
 
-    if len(fighter_df) + len(opponent_df) == 0:
-        return 0
-    else:
-        return 0
+    df = pd.concat([fighter_df,opponent_df]).sort_values(by='date',ascending=False)
+      
+    count = 0
+    for result in df.result:
+        if result == 'W':
+            count += 1
+        else:
+            break
+    return count        
     
