@@ -257,5 +257,24 @@ def get_last_n_stat_mean(fighter:str,stat_col:str,time,data,n=3):
         return 0
     else:
         return np.mean(opponent_df[f'o_{stat}'].tolist() + fighter_df[f'f_{stat}'].tolist())          
+def get_win_perc(fighter:str,time,data):
+    df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False)
+    
+    fighter_df = df[['date','fighter','result']][df.fighter==fighter]
+    opponent_df = df[['date','opponent','result']][df.opponent==fighter]
 
+    if len(fighter_df) + len(opponent_df) == 0:
+        return 0
+    else:
+        return (len(fighter_df[fighter_df.result == 'W']) + len(opponent_df[opponent_df.result == 'L']))/len(df)
+def get_win_streak(fighter:str,time,data):
+    df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False)
+    
+    fighter_df = df[['date','fighter','result']][df.fighter==fighter]
+    opponent_df = df[['date','opponent','result']][df.opponent==fighter]
+
+    if len(fighter_df) + len(opponent_df) == 0:
+        return 0
+    else:
+        return 0
     
