@@ -151,18 +151,18 @@ def get_str_perc(FIGHT_URL: str):
     xml = get_xml(FIGHT_URL)
     data = [item.text.strip().replace('\n', '').replace(' ', '')
             for item in xml.find_all('div', {'class': 'b-fight-details__charts-row'})]
-    return {'f_sig_str_head_perc': int(data[0][:data[0].find('%')])/100,
-            'f_sig_str_body_perc': int(data[1][:data[1].find('%')])/100,
-            'f_sig_str_leg_perc': int(data[2][:data[2].find('%')])/100,
-            'f_sig_str_dist_perc': int(data[3][:data[3].find('%')])/100,
-            'f_sig_str_clinch_perc': int(data[4][:data[4].find('%')])/100,
-            'f_sig_str_ground_perc': int(data[5][:data[5].find('%')])/100,
-            'o_sig_str_head_perc': int(data[0][data[0].find('Head')+len('Head'):-1])/100,
-            'o_sig_str_body_perc': int(data[1][data[1].find('Body')+len('Body'):-1])/100,
-            'o_sig_str_leg_perc': int(data[2][data[2].find('Leg')+len('Leg'):-1])/100,
-            'o_sig_str_dist_perc': int(data[3][data[3].find('Distance')+len('Distance'):-1])/100,
-            'o_sig_str_clinch_perc': int(data[4][data[4].find('Clinch')+len('Clinch'):-1])/100,
-            'o_sig_str_ground_perc': int(data[5][data[5].find('Ground')+len('Ground'):-1])/100,
+    return {'f_head_str_perc': int(data[0][:data[0].find('%')])/100,
+            'f_body_str_perc': int(data[1][:data[1].find('%')])/100,
+            'f_leg_str_perc': int(data[2][:data[2].find('%')])/100,
+            'f_dist_str_perc': int(data[3][:data[3].find('%')])/100,
+            'f_clinch_str_perc': int(data[4][:data[4].find('%')])/100,
+            'f_ground_str_perc': int(data[5][:data[5].find('%')])/100,
+            'o_head_str_perc': int(data[0][data[0].find('Head')+len('Head'):-1])/100,
+            'o_body_str_perc': int(data[1][data[1].find('Body')+len('Body'):-1])/100,
+            'o_leg_str_perc': int(data[2][data[2].find('Leg')+len('Leg'):-1])/100,
+            'o_dist_str_perc': int(data[3][data[3].find('Distance')+len('Distance'):-1])/100,
+            'o_clinch_str_perc': int(data[4][data[4].find('Clinch')+len('Clinch'):-1])/100,
+            'o_ground_str_perc': int(data[5][data[5].find('Ground')+len('Ground'):-1])/100,
             'url':FIGHT_URL}
 def get_fighters_links(page_url):
     xml = get_xml(page_url)
@@ -181,8 +181,8 @@ def get_signifacant_str(FIGHT_URL):
     fighter_val = data[ROW_LENGTH::2]
     opponent_val = data[ROW_LENGTH+1::2]
     data = dict(zip(keys,zip(fighter_val,opponent_val)))
-    fighter_keys = [f'f_{key}_sig_str' for key in list(data.keys())]
-    opponent_keys = [f'o_{key}_sig_str' for key in list(data.keys())]
+    fighter_keys = [f'f_{key}_str' for key in list(data.keys())]
+    opponent_keys = [f'o_{key}_str' for key in list(data.keys())]
     dict_data = dict(zip(fighter_keys[3:]+opponent_keys[3:],fighter_val[3:]+opponent_val[3:]))
     dict_data.update({'url':FIGHT_URL})
     return dict_data
