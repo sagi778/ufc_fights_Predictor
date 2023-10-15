@@ -220,6 +220,8 @@ def set_train_test(X_columns, y_columns, data, test_size=0.3, valid_size=0.3):
     
     print(f'Data split: Data={data.shape}, train_set={X_train.shape}, validation_set={X_val.shape}, test_set={X_test.shape}')
     return data
+
+# Feature engineering
 def get_mean_stat(fighter:str,stat_col:str,time,data):
     # input check
     if f'f_{stat_col}' in data.columns or f'o_{stat_col}' in data.columns:
@@ -238,6 +240,13 @@ def get_mean_stat(fighter:str,stat_col:str,time,data):
         return 0
     else:
         return np.mean(opponent_df[f'o_{stat}'].tolist() + fighter_df[f'f_{stat}'].tolist())  
+def get_current_streak_mean_stat(fighter:str,stat_col:str,time,data):
+    # get last result
+    LAST_RESULT = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False).loc[0,'result']
+    
+    # get df of current streak
+    #df = 
+    return LAST_RESULT
 def get_last_n_stat_mean(fighter:str,stat_col:str,time,data,n=3):
     # input check
     if f'f_{stat_col}' in data.columns or f'o_{stat_col}' in data.columns:
@@ -257,23 +266,18 @@ def get_last_n_stat_mean(fighter:str,stat_col:str,time,data,n=3):
         return 0
     else:
         return np.mean(opponent_df[f'o_{stat}'].tolist() + fighter_df[f'f_{stat}'].tolist())          
-def get_win_perc(fighter:str,time,data):
-    df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False)
-    
-    fighter_df = df[['date','fighter','result']][df.fighter==fighter]
-    opponent_df = df[['date','opponent','result']][df.opponent==fighter]
 
-    if len(fighter_df) + len(opponent_df) == 0:
+# Pre-processing
+def get_win_perc(fighter:str,time,data):
+    df = get_streak(fighter=fighter,time=time,data=data)
+
+    if len(df) == 0:
         return 0
     else:
-        return (len(fighter_df[fighter_df.result == 'W']) + len(opponent_df[opponent_df.result == 'L']))/len(df)
+        return len(df[df.result=='W'])/len(df)
 def get_win_streak(fighter:str,time,data):
-    df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False)
     
-    fighter_df = df[['date','fighter','result']][df.fighter==fighter]
-    opponent_df = df[['date','opponent','result']][df.opponent==fighter].rename(columns={'opponent':'fighter'})
-
-    df = pd.concat([fighter_df,opponent_df]).sort_values(by='date',ascending=False)
+    df = get_streak(fighter=fighter,time=time,data=data)
       
     count = 0
     for result in df.result:
@@ -282,4 +286,9 @@ def get_win_streak(fighter:str,time,data):
         else:
             break
     return count        
-    
+def get_streak(fighter:str,time,data): 
+    df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False)
+    fighter_df = df[['date','fighter','opponent','result']][df.fighter==fighter]
+    opponent_df = df[['date','fighter','opponent','result']][df.opponent==fighter].rename(columns={'opponent':'fighter','fighter':'opponent'})
+    opponent_df['result'] = ['L' if result=='W' else result for result in opponent_df.result]
+    return pd.concat([fighter_df,opponent_df]).sort_values(by='date',ascending=False)#.reset_index(drop=True)   
