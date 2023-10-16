@@ -12,6 +12,7 @@ import seaborn as sns
 from scipy import stats
 from random import random
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 pd.set_option('display.max_columns', None)
 
 # file management
