@@ -269,6 +269,24 @@ def get_last_n_stat_mean(fighter:str,stat_col:str,time,data,n=3):
         return np.mean(opponent_df[f'o_{stat}'].tolist() + fighter_df[f'f_{stat}'].tolist())          
 
 # Pre-processing
+def get_switched_row(index:int,data:pd.DataFrame()):
+
+    row = data.loc[index]
+
+    if row['result'] == 'W':
+        result = 'L'
+    elif row['result'] == 'L':
+        result = 'W'
+    else:
+        result = row['result']
+
+    f_stat = dict(row[[item for item in data.columns if 'f_' in item]])
+    o_stat = dict(row[[item for item in data.columns if 'o_' in item]])
+
+    return {**row[['url','event_url','date','title','method','round','time','format']].to_dict(),
+            **{'fighter':row['opponent'],'opponent':row['fighter'],'result':result},
+            **dict(zip(f_stat.keys(),o_stat.values())),
+            **dict(zip(o_stat.keys(),f_stat.values()))}
 def get_win_perc(fighter:str,time,data):
     df = get_streak(fighter=fighter,time=time,data=data)
 
@@ -286,7 +304,18 @@ def get_win_streak(fighter:str,time,data):
             count += 1
         else:
             break
-    return count        
+    return count 
+def get_lose_streak(fighter:str,time,data):
+    
+    df = get_streak(fighter=fighter,time=time,data=data)
+      
+    count = 0
+    for result in df.result:
+        if result == 'L':
+            count += 1
+        else:
+            break
+    return count         
 def get_streak(fighter:str,time,data): 
     df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False)
     fighter_df = df[['date','fighter','opponent','result']][df.fighter==fighter]
