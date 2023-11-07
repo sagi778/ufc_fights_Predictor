@@ -12,7 +12,10 @@ import seaborn as sns
 from scipy import stats
 from random import random
 from sklearn.linear_model import LogisticRegression
+from xgboost import XGBClassifier
+from sklearn.neighbors import KNeighborsClassifier 
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import f1_score, precision_score, recall_score
 pd.set_option('display.max_columns', None)
 
 # file management
@@ -233,14 +236,12 @@ def get_mean_stat(fighter:str,stat_col:str,time,data):
         print(f'"{stat_col}" column not found in {data.columns}')
         return None
 
-    df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))]
-    fighter_df = df[['date','fighter',f'f_{stat}']][df.fighter==fighter]
-    opponent_df = df[['date','opponent',f'o_{stat}']][df.opponent==fighter]
+    df = get_data(fighter=fighter,time=time,data=data)
 
-    if len(fighter_df) + len(opponent_df) == 0:
+    if len(df) == 0:
         return 0
     else:
-        return np.mean(opponent_df[f'o_{stat}'].tolist() + fighter_df[f'f_{stat}'].tolist())  
+        return np.mean(df[f'f_{stat}'].tolist())  
 def get_current_streak_mean_stat(fighter:str,stat_col:str,time,data):
     # get last result
     LAST_RESULT = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False).loc[0,'result']
@@ -283,7 +284,7 @@ def get_switched_row(index:int,data:pd.DataFrame()):
     f_stat = dict(row[[item for item in data.columns if 'f_' in item]])
     o_stat = dict(row[[item for item in data.columns if 'o_' in item]])
 
-    return {**row[['url','event_url','date','title','method','round','time','format']].to_dict(),
+    return {**row[[col for col in data.columns[:list(data.columns).index('rounds')+1]]].to_dict(),
             **{'fighter':row['opponent'],'opponent':row['fighter'],'result':result},
             **dict(zip(f_stat.keys(),o_stat.values())),
             **dict(zip(o_stat.keys(),f_stat.values()))}
@@ -307,7 +308,7 @@ def get_win_streak(fighter:str,time,data):
     return count 
 def get_lose_streak(fighter:str,time,data):
     
-    df = get_streak(fighter=fighter,time=time,data=data)
+    df = get_data(fighter=fighter,data=data,time=time)
       
     count = 0
     for result in df.result:
@@ -316,9 +317,43 @@ def get_lose_streak(fighter:str,time,data):
         else:
             break
     return count         
-def get_streak(fighter:str,time,data): 
+def get_data(fighter:str,data:pd.DataFrame(),time):
+    
     df = data[(data.date < time)&((data.fighter==fighter)|(data.opponent==fighter))].sort_values(by=['date'],ascending=False)
-    fighter_df = df[['date','fighter','opponent','result']][df.fighter==fighter]
-    opponent_df = df[['date','fighter','opponent','result']][df.opponent==fighter].rename(columns={'opponent':'fighter','fighter':'opponent'})
-    opponent_df['result'] = ['L' if result=='W' else result for result in opponent_df.result]
-    return pd.concat([fighter_df,opponent_df]).sort_values(by='date',ascending=False)#.reset_index(drop=True)   
+    fighter_df = df[df.fighter==fighter]
+    opponent_df = df[df.opponent==fighter]
+    
+    # switch stats & names for opponent_df:
+    new_opp_df = pd.DataFrame(columns=opponent_df.columns)
+    for i in opponent_df.index:
+        new_opp_df.loc[len(new_opp_df)] = get_switched_row(index=i,data=df)
+
+    return pd.concat([fighter_df,new_opp_df]).sort_values(by='date',ascending=False).reset_index(drop=True)
+def get_streak(fighter:str,data:pd.DataFrame(),time):
+
+    df = get_data(fighter=fighter,data=data,time=time)[['date','result','opponent']]
+    latest_result = df.loc[0,'result'] if len(df) > 0 else 0
+    end_streak_index = min(df.index[df.result != latest_result]) if len(df[df.result!=latest_result]) > 0 else len(df)
+    
+    if latest_result == 'L':
+        return -1*(len(df[(df.result==latest_result)&(df.index <= end_streak_index)]))
+    else:
+        return len(df[(df.result==latest_result)&(df.index <= end_streak_index)])
+def get_slpm(fighter:str,data:pd.DataFrame(),time):
+    df = get_data(fighter=fighter,data=data,time=time)[['date','opponent','fight_time','f_str_succ']]
+    if np.sum(df.fight_time) > 0:
+        return round(np.sum(df.f_str_succ)/np.sum(df.fight_time),2)
+    else:
+        return None
+def get_sapm(fighter:str,data:pd.DataFrame(),time):
+    df = get_data(fighter=fighter,data=data,time=time)[['date','opponent','fight_time','f_str_abs']]
+    if np.sum(df.fight_time) > 0:
+        return round(np.sum(df.f_str_abs)/np.sum(df.fight_time),2)
+    else:
+        return None
+def get_str_acc(fighter:str,time,data):
+    df = get_data(fighter=fighter,data=data,time=time)[['date','opponent','f_str_succ','f_str_att']]
+    if np.sum(df.f_str_att) > 0:
+        return round(np.sum(df.f_str_succ)/np.sum(df.f_str_att),2)
+    else:
+        return None
