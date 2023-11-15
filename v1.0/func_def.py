@@ -8,12 +8,19 @@ from datetime import datetime
 from time import time
 from tqdm import tqdm
 import os
+import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
 from random import random
 from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
 from xgboost import XGBClassifier
 from sklearn.neighbors import KNeighborsClassifier 
+from sklearn.neural_network import MLPClassifier
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import f1_score, precision_score, recall_score
 pd.set_option('display.max_columns', None)
@@ -206,6 +213,7 @@ def get_event_data(EVENT_URL, EVENT_TIME=None):
     for url in get_card(EVENT_URL)['url']:
         row = {'url':url,'event_url':EVENT_URL,'date':EVENT_TIME}
         row.update(get_fight_result(url))
+        row.update(get_fight_general_stats(url))# test
         row.update(get_signifacant_str(url))
         row.update(get_str_perc(url)) 
         data.append(row)
@@ -289,12 +297,12 @@ def get_switched_row(index:int,data:pd.DataFrame()):
             **dict(zip(f_stat.keys(),o_stat.values())),
             **dict(zip(o_stat.keys(),f_stat.values()))}
 def get_win_perc(fighter:str,time,data):
-    df = get_streak(fighter=fighter,time=time,data=data)
-
-    if len(df) == 0:
-        return 0
+    res = get_data(fighter=fighter,time=time,data=data).result.tolist()
+    
+    if len(res) > 0:
+        return round(res.count('W')/len(res),2)
     else:
-        return len(df[df.result=='W'])/len(df)
+        return 0
 def get_win_streak(fighter:str,time,data):
     
     df = get_streak(fighter=fighter,time=time,data=data)
@@ -357,3 +365,51 @@ def get_str_acc(fighter:str,time,data):
         return round(np.sum(df.f_str_succ)/np.sum(df.f_str_att),2)
     else:
         return None
+def get_str_acc_mean(fighter:str,time,data):
+    df = get_data(fighter=fighter,data=data,time=time)[['date','opponent','f_str_succ','f_str_att']]
+    if np.sum(df.f_str_att) > 0:
+        return round(np.mean(df.f_str_succ)/np.mean(df.f_str_att),2)
+    else:
+        return None 
+
+# Feature engineering
+def get_current_stat_mean(fighter:str,time,stat:str,data:pd.DataFrame()):
+    df = get_data(fighter=fighter,data=data,time=time)[['date','fighter','opponent',f'f_{stat}']] 
+    if len(df) > 0:
+        return round(np.mean(df[f'f_{stat}']),2)
+    else:
+        return None
+def feature_significance(data, column, y='result'):
+    
+    # Split data into labels groups
+    data = data[~data[y].isna()]
+    group1 = data[data[y] == data[y].unique()[0]][column]
+    group2 = data[data[y] == data[y].unique()[1]][column]
+
+    # Perform t-test
+    _, p_value = stats.ttest_ind(group1,group2)
+
+    # Plot the impact of the numerical column
+    plt.figure(figsize=(4,4))
+    sns.boxplot(x=y, y=column, data=data,saturation=0.8,palette='pastel',linewidth=1.5,fliersize=0)
+    sns.lineplot(x=[data[y].unique()[0],data[y].unique()[1]],y=[np.mean(group1),np.mean(group2)])
+    sns.stripplot(x=y, y=column, data=data[data[column]!=0],jitter=0.25,color='black',size=1)
+    sns.stripplot(x=[data[y].unique()[0],data[y].unique()[1]],y=[np.mean(group1),np.mean(group2)],color='red')
+    plt.title(f'Impact of {column} on {y}')
+    plt.show()
+
+    print(f'p_value = {p_value}')
+    print(f'mean({data[y].unique()[0]}) = {np.mean(group1)} +- {np.std(group1)}')
+    print(f'mean({data[y].unique()[1]}) = {np.mean(group2)} +- {np.std(group2)}')
+    return p_value
+def get_correlation(x, y):
+    y = np.ravel(y).reshape(-1,1)
+    lr =  LinearRegression()
+    lr.fit(x, y)
+    y_pred = lr.predict(x)
+
+    plt.figure(figsize=(4,4))
+    sns.scatterplot(x=x,y=y)
+    plt.show()
+
+    return r2_score(y, y_pred)  
