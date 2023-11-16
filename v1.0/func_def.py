@@ -379,10 +379,10 @@ def get_current_stat_mean(fighter:str,time,stat:str,data:pd.DataFrame()):
         return round(np.mean(df[f'f_{stat}']),2)
     else:
         return None
-def feature_significance(data, column, y='result'):
+def feature_significance(data, column:str, y='result',visualize=False):
     
     # Split data into labels groups
-    data = data[~data[y].isna()]
+    data = data[(~data[y].isna())&(~data[column].isna())]
     group1 = data[data[y] == data[y].unique()[0]][column]
     group2 = data[data[y] == data[y].unique()[1]][column]
 
@@ -390,26 +390,35 @@ def feature_significance(data, column, y='result'):
     _, p_value = stats.ttest_ind(group1,group2)
 
     # Plot the impact of the numerical column
-    plt.figure(figsize=(4,4))
-    sns.boxplot(x=y, y=column, data=data,saturation=0.8,palette='pastel',linewidth=1.5,fliersize=0)
-    sns.lineplot(x=[data[y].unique()[0],data[y].unique()[1]],y=[np.mean(group1),np.mean(group2)])
-    sns.stripplot(x=y, y=column, data=data[data[column]!=0],jitter=0.25,color='black',size=1)
-    sns.stripplot(x=[data[y].unique()[0],data[y].unique()[1]],y=[np.mean(group1),np.mean(group2)],color='red')
-    plt.title(f'Impact of {column} on {y}')
-    plt.show()
+    if visualize == True:
+        plt.figure(figsize=(4,4))
+        sns.boxplot(x=y, y=column, data=data,saturation=0.8,palette='pastel',linewidth=1.5,fliersize=0)
+        sns.lineplot(x=[data[y].unique()[0],data[y].unique()[1]],y=[np.mean(group1),np.mean(group2)])
+        sns.stripplot(x=y, y=column, data=data[data[column]!=0],jitter=0.25,color='black',size=1)
+        sns.stripplot(x=[data[y].unique()[0],data[y].unique()[1]],y=[np.mean(group1),np.mean(group2)],color='red')
+        plt.title(f'Impact of {column} on {y}')
+        plt.show()
 
-    print(f'p_value = {p_value}')
-    print(f'mean({data[y].unique()[0]}) = {np.mean(group1)} +- {np.std(group1)}')
-    print(f'mean({data[y].unique()[1]}) = {np.mean(group2)} +- {np.std(group2)}')
+        print(f'p_value = {p_value}')
+        print(f'mean({data[y].unique()[0]}) = {np.mean(group1)} +- {np.std(group1)}')
+        print(f'mean({data[y].unique()[1]}) = {np.mean(group2)} +- {np.std(group2)}')
+
     return p_value
-def get_correlation(x, y):
-    y = np.ravel(y).reshape(-1,1)
-    lr =  LinearRegression()
-    lr.fit(x, y)
-    y_pred = lr.predict(x)
+def get_correlation(data:pd.DataFrame(),x1:str,x2:str,visualize=False):
+    
+    col1 = data[(~data[x1].isna())&(~data[x2].isna())][x1]
+    col2 = data[(~data[x1].isna())&(~data[x2].isna())][x2]
 
-    plt.figure(figsize=(4,4))
-    sns.scatterplot(x=x,y=y)
-    plt.show()
+    # Calculate the correlation matrix
+    correlation_matrix = np.corrcoef(col1,col2)
 
-    return r2_score(y, y_pred)  
+    # Extract the R-squared correlation coefficient
+    r_squared = correlation_matrix[0, 1] ** 2
+    
+    if visualize == True:
+        print(f'R^2 = {r_squared}')
+        plt.figure(figsize=(4,3))
+        sns.scatterplot(x=col1,y=col2)
+        plt.show()
+
+    return r_squared
